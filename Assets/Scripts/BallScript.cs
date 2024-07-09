@@ -8,6 +8,12 @@ public class BallScript : MonoBehaviour
 
     public float force = 2f;
 
+    [SerializeField]
+    private Material daySkybox;
+    [SerializeField]
+    private Material nightSkybox;
+    [SerializeField]
+    private Light mainLight;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,5 +38,25 @@ public class BallScript : MonoBehaviour
         
         Vector3 moveDirection = fz * camForward + fx * Camera.main.transform.right;
         rigidbody.AddForce(moveDirection);
+
+        if( Input.GetKeyDown(KeyCode.N) )
+        {
+            if( RenderSettings.skybox == daySkybox )
+            {
+                RenderSettings.skybox = nightSkybox;
+                RenderSettings.skybox.SetFloat("_Exposure", 0.1f);
+
+                RenderSettings.ambientIntensity = 0f;
+                mainLight.intensity = 0f;
+            }
+            else
+            {
+                RenderSettings.skybox = daySkybox;
+                RenderSettings.skybox.SetFloat("_Exposure", 1f);
+                mainLight.intensity = 1f;
+                RenderSettings.ambientIntensity = 1f;
+
+            }
+        }
     }
 }
